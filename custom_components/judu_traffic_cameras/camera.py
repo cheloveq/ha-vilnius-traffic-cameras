@@ -9,6 +9,7 @@ import time
 from homeassistant.components.camera import Camera
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import CoordinatorEntity, DataUpdateCoordinator
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
@@ -74,6 +75,23 @@ class JUDUTrafficCamera(CoordinatorEntity, Camera):
     def still_image_url(self) -> str:
         """Return the current JUDU image URL."""
         return f"{IMAGE_URL.format(image=self._image)}?v={self.coordinator.data}"
+
+    async def async_camera_image(
+        self, width: int | None = None, height: int | None = None
+    ) -> bytes | None:
+        """Fetch the current JPEG for Home Assistant's camera proxy."""
+        session = async_get_clientsession(self.hass)
+        try:
+            async with session.get(self.still_image_url) as response:
+                if response.status != 200:
+                    _LOGGER.warning(
+                        "JUDU camera %s returned HTTP %s", self._image, response.status
+                    )
+                    return None
+                return await response.read()
+        except Exception as err:  # Keep the entity available if a source is down.
+            _LOGGER.warning("Unable to fetch JUDU camera %s: %s", self._image, err)
+            return None
 
     @property
     def extra_state_attributes(self) -> dict[str, str]:
