@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="brand/icon.png" alt="JUDU Vilnius Traffic Cameras" width="180">
+  <img src="https://raw.githubusercontent.com/cheloveq/ha-vilnius-traffic-cameras/main/brand/icon.png" alt="JUDU Vilnius Traffic Cameras" width="180">
 </p>
 
 # JUDU Vilnius Traffic Cameras
