@@ -4,6 +4,10 @@
 
 # Vilnius Traffic Cameras
 
+[![Validate](https://github.com/cheloveq/ha-vilnius-traffic-cameras/actions/workflows/validate.yml/badge.svg)](https://github.com/cheloveq/ha-vilnius-traffic-cameras/actions/workflows/validate.yml)
+[![HACS](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://www.hacs.xyz/)
+[![Latest release](https://img.shields.io/github/v/release/cheloveq/ha-vilnius-traffic-cameras)](https://github.com/cheloveq/ha-vilnius-traffic-cameras/releases)
+
 > **Unofficial community integration.** This project is not created, endorsed, or supported by JUDU, Vilnius city, or any other camera-data provider.
 
 Home Assistant custom integration for the periodically refreshed JPEG traffic-camera images published by [JUDU](https://judu.lt/vairuotojams/eismo-zemelapiai/eismo-stebejimo-kameros/).
@@ -18,3 +22,7 @@ Images are requested from `map.sviesoforai.lt` with a configurable refresh inter
 2. Install **Vilnius Traffic Cameras**.
 3. Restart Home Assistant and add the integration from Settings → Devices & services.
 4. Select the camera locations you want to expose.
+
+## Support
+
+Please include the Home Assistant version, integration version, camera location, and relevant logs when [opening an issue](https://github.com/cheloveq/ha-vilnius-traffic-cameras/issues).

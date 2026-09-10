@@ -1,7 +1,7 @@
 {
   "domain": "judu_traffic_cameras",
   "name": "Vilnius Traffic Cameras",
-  "codeowners": [],
+  "codeowners": ["@cheloveq"],
   "config_flow": true,
   "documentation": "https://github.com/cheloveq/ha-vilnius-traffic-cameras",
   "iot_class": "cloud_polling",
