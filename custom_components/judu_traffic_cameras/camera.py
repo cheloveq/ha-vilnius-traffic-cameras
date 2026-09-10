@@ -64,7 +64,7 @@ class JUDUTrafficCamera(CoordinatorEntity, Camera):
 
     def __init__(self, coordinator: DataUpdateCoordinator, image: str, name: str) -> None:
         CoordinatorEntity.__init__(self, coordinator)
-        super().__init__()
+        Camera.__init__(self)
         self._image = image
         self._attr_unique_id = f"{DOMAIN}_{image.removesuffix('.jpg').lower()}"
         self._attr_name = name
