@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "Select JUDU traffic cameras",
-        "description": "Choose which of the {camera_count} JUDU image cameras should become Home Assistant entities.",
+        "description": "Unofficial community integration, not affiliated with or supported by JUDU. Choose which of the {camera_count} JUDU image cameras should become Home Assistant entities.",
         "data": {"cameras": "Cameras", "refresh_minutes": "Refresh interval (minutes)"}
       }
     },

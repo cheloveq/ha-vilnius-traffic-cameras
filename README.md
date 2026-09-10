@@ -4,6 +4,8 @@
 
 # JUDU Vilnius Traffic Cameras
 
+> **Unofficial community integration.** This project is not created, endorsed, or supported by JUDU, Vilnius city, or any other camera-data provider.
+
 Home Assistant custom integration for the periodically refreshed JPEG traffic-camera images published by [JUDU](https://judu.lt/vairuotojams/eismo-zemelapiai/eismo-stebejimo-kameros/).
 
 The integration loads JUDU's public camera catalog and lets you select which cameras become entities. It currently contains 191 camera images across 105 junction groups. Add or remove selected entities later through the integration's Options flow.
