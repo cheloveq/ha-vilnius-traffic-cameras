@@ -26,12 +26,14 @@ class CatalogTestCase(unittest.TestCase):
         self.assertIn("var config =", source)
         self.assertIn("async_get_catalog", flow)
         self.assertIn("CONF_CAMERAS", flow)
+        self.assertIn("CONF_REFRESH_MINUTES", flow)
+        self.assertIn("DEFAULT_REFRESH_MINUTES", flow)
 
     def test_image_endpoint_and_refresh(self) -> None:
         camera = (COMPONENT / "camera.py").read_text()
         self.assertIn("/camera/api/camera/{image}", (COMPONENT / "const.py").read_text())
-        self.assertIn("cache_buster", camera)
-        self.assertIn("async_update", camera)
+        self.assertIn("coordinator.data", camera)
+        self.assertIn("update_interval=timedelta(minutes=refresh_minutes)", camera)
 
 
 if __name__ == "__main__":

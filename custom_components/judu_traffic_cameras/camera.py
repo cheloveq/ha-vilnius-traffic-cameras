@@ -2,15 +2,27 @@
 
 from __future__ import annotations
 
+from datetime import timedelta
+import logging
 import time
 
 from homeassistant.components.camera import Camera
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.update_coordinator import CoordinatorEntity, DataUpdateCoordinator
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .catalog import async_get_catalog
-from .const import CONF_CAMERAS, DOMAIN, IMAGE_URL, PAGE_URL
+from .const import (
+    CONF_CAMERAS,
+    CONF_REFRESH_MINUTES,
+    DEFAULT_REFRESH_MINUTES,
+    DOMAIN,
+    IMAGE_URL,
+    PAGE_URL,
+)
+
+_LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(
@@ -20,36 +32,48 @@ async def async_setup_entry(
 ) -> None:
     """Create entities for the cameras selected by the user."""
     catalog = await async_get_catalog(hass)
+    refresh_minutes = entry.options.get(
+        CONF_REFRESH_MINUTES,
+        entry.data.get(CONF_REFRESH_MINUTES, DEFAULT_REFRESH_MINUTES),
+    )
+    coordinator = DataUpdateCoordinator(
+        hass,
+        _LOGGER,
+        name="JUDU traffic camera refresh",
+        update_method=lambda: _async_refresh_timestamp(),
+        update_interval=timedelta(minutes=refresh_minutes),
+    )
+    await coordinator.async_config_entry_first_refresh()
     entities = [
-        JUDUTrafficCamera(image, catalog[image])
+        JUDUTrafficCamera(coordinator, image, catalog[image])
         for image in entry.options.get(CONF_CAMERAS, entry.data[CONF_CAMERAS])
         if image in catalog
     ]
     async_add_entities(entities)
 
 
-class JUDUTrafficCamera(Camera):
+async def _async_refresh_timestamp() -> int:
+    """Run a lightweight coordinator tick for the configured interval."""
+    return int(time.time())
+
+
+class JUDUTrafficCamera(CoordinatorEntity, Camera):
     """A periodically refreshed JUDU JPEG camera."""
 
     _attr_has_entity_name = True
-    _attr_should_poll = True
 
-    def __init__(self, image: str, name: str) -> None:
+    def __init__(self, coordinator: DataUpdateCoordinator, image: str, name: str) -> None:
+        CoordinatorEntity.__init__(self, coordinator)
         super().__init__()
         self._image = image
         self._attr_unique_id = f"{DOMAIN}_{image.removesuffix('.jpg').lower()}"
         self._attr_name = name
         self._attr_content_type = "image/jpeg"
-        self._cache_buster = int(time.time())
-
-    async def async_update(self) -> None:
-        """Change the URL so HA clients request the latest image."""
-        self._cache_buster = int(time.time())
 
     @property
     def still_image_url(self) -> str:
         """Return the current JUDU image URL."""
-        return f"{IMAGE_URL.format(image=self._image)}?v={self._cache_buster}"
+        return f"{IMAGE_URL.format(image=self._image)}?v={self.coordinator.data}"
 
     @property
     def extra_state_attributes(self) -> dict[str, str]:

@@ -10,7 +10,7 @@ from homeassistant.core import callback
 from homeassistant.helpers import selector
 
 from .catalog import CatalogError, async_get_catalog
-from .const import CONF_CAMERAS, DOMAIN
+from .const import CONF_CAMERAS, CONF_REFRESH_MINUTES, DEFAULT_REFRESH_MINUTES, DOMAIN
 
 
 class JUDUTrafficCamerasConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
@@ -36,12 +36,22 @@ class JUDUTrafficCamerasConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 if step_id == "user":
                     return self.async_create_entry(
                         title="JUDU Traffic Cameras",
-                        data={CONF_CAMERAS: selected},
+                        data={
+                            CONF_CAMERAS: selected,
+                            CONF_REFRESH_MINUTES: user_input[CONF_REFRESH_MINUTES],
+                        },
                     )
-                return self.async_create_entry(title="JUDU Traffic Cameras", data={CONF_CAMERAS: selected})
+                return self.async_create_entry(title="JUDU Traffic Cameras", data=user_input)
             errors[CONF_CAMERAS] = "no_cameras"
 
-        schema = vol.Schema({vol.Required(CONF_CAMERAS): _camera_selector(catalog)})
+        schema = vol.Schema(
+            {
+                vol.Required(CONF_CAMERAS): _camera_selector(catalog),
+                vol.Required(CONF_REFRESH_MINUTES, default=DEFAULT_REFRESH_MINUTES): vol.All(
+                    vol.Coerce(int), vol.Range(min=1, max=60)
+                ),
+            }
+        )
         return self.async_show_form(
             step_id=step_id,
             data_schema=schema,
@@ -76,7 +86,16 @@ class JUDUTrafficCamerasOptionsFlow(config_entries.OptionsFlow):
                         default=self.config_entry.options.get(
                             CONF_CAMERAS, self.config_entry.data.get(CONF_CAMERAS, [])
                         ),
-                    ): _camera_selector(catalog)
+                    ): _camera_selector(catalog),
+                    vol.Required(
+                        CONF_REFRESH_MINUTES,
+                        default=self.config_entry.options.get(
+                            CONF_REFRESH_MINUTES,
+                            self.config_entry.data.get(
+                                CONF_REFRESH_MINUTES, DEFAULT_REFRESH_MINUTES
+                            ),
+                        ),
+                    ): vol.All(vol.Coerce(int), vol.Range(min=1, max=60)),
                 }
             ),
         )

@@ -8,7 +8,7 @@ Home Assistant custom integration for the periodically refreshed JPEG traffic-ca
 
 The integration loads JUDU's public camera catalog and lets you select which cameras become entities. It currently contains 191 camera images across 105 junction groups. Add or remove selected entities later through the integration's Options flow.
 
-Images are requested from `map.sviesoforai.lt` with a one-minute polling interval and a cache-busting query parameter. These are still images, not live video streams.
+Images are requested from `map.sviesoforai.lt` with a configurable refresh interval, defaulting to five minutes, and a cache-busting query parameter. These are still images, not live video streams.
 
 ## HACS
 
