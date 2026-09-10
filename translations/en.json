@@ -1,0 +1,23 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Select JUDU traffic cameras",
+        "description": "Choose which of the {camera_count} JUDU image cameras should become Home Assistant entities.",
+        "data": {"cameras": "Cameras"}
+      }
+    },
+    "error": {
+      "cannot_connect": "Unable to load the JUDU camera catalog.",
+      "no_cameras": "Select at least one camera."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Select JUDU traffic cameras",
+        "data": {"cameras": "Cameras"}
+      }
+    }
+  }
+}
