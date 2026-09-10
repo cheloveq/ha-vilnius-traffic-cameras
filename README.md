@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/cheloveq/ha-vilnius-traffic-cameras/main/brand/icon.png" alt="JUDU Vilnius Traffic Cameras" width="180">
+  <img src="https://raw.githubusercontent.com/cheloveq/ha-vilnius-traffic-cameras/main/brand/icon.png" alt="Vilnius Traffic Cameras" width="180">
 </p>
 
-# JUDU Vilnius Traffic Cameras
+# Vilnius Traffic Cameras
 
 > **Unofficial community integration.** This project is not created, endorsed, or supported by JUDU, Vilnius city, or any other camera-data provider.
 
@@ -15,6 +15,6 @@ Images are requested from `map.sviesoforai.lt` with a configurable refresh inter
 ## HACS
 
 1. Add this repository as a HACS custom **Integration**: `https://github.com/cheloveq/ha-vilnius-traffic-cameras`.
-2. Install **JUDU Vilnius Traffic Cameras**.
+2. Install **Vilnius Traffic Cameras**.
 3. Restart Home Assistant and add the integration from Settings → Devices & services.
 4. Select the camera locations you want to expose.

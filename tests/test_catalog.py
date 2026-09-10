@@ -18,7 +18,8 @@ class CatalogTestCase(unittest.TestCase):
         manifest = json.loads((COMPONENT / "manifest.json").read_text())
         self.assertEqual(manifest["domain"], "judu_traffic_cameras")
         self.assertTrue(manifest["config_flow"])
-        self.assertEqual(manifest["version"], "0.1.4")
+        self.assertEqual(manifest["name"], "Vilnius Traffic Cameras")
+        self.assertEqual(manifest["version"], "0.1.5")
 
     def test_catalog_parser_and_selectable_entities(self) -> None:
         source = (COMPONENT / "catalog.py").read_text()

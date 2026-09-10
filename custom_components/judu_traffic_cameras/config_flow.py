@@ -35,13 +35,13 @@ class JUDUTrafficCamerasConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             if selected:
                 if step_id == "user":
                     return self.async_create_entry(
-                        title="JUDU Traffic Cameras",
+                        title="Vilnius Traffic Cameras",
                         data={
                             CONF_CAMERAS: selected,
                             CONF_REFRESH_MINUTES: user_input[CONF_REFRESH_MINUTES],
                         },
                     )
-                return self.async_create_entry(title="JUDU Traffic Cameras", data=user_input)
+                return self.async_create_entry(title="Vilnius Traffic Cameras", data=user_input)
             errors[CONF_CAMERAS] = "no_cameras"
 
         schema = vol.Schema(
