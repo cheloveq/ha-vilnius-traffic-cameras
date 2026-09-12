@@ -13,7 +13,6 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import CoordinatorEntity, DataUpdateCoordinator
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .catalog import async_get_catalog
 from .const import (
     CONF_CAMERAS,
     CONF_REFRESH_MINUTES,
@@ -32,7 +31,7 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Create entities for the cameras selected by the user."""
-    catalog = await async_get_catalog(hass)
+    catalog: dict[str, str] = entry.runtime_data
     refresh_minutes = entry.options.get(
         CONF_REFRESH_MINUTES,
         entry.data.get(CONF_REFRESH_MINUTES, DEFAULT_REFRESH_MINUTES),

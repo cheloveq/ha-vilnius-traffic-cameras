@@ -19,7 +19,7 @@ class CatalogTestCase(unittest.TestCase):
         self.assertEqual(manifest["domain"], "judu_traffic_cameras")
         self.assertTrue(manifest["config_flow"])
         self.assertEqual(manifest["name"], "Vilnius Traffic Cameras")
-        self.assertEqual(manifest["version"], "0.1.5")
+        self.assertEqual(manifest["version"], "0.1.6")
 
     def test_catalog_parser_and_selectable_entities(self) -> None:
         source = (COMPONENT / "catalog.py").read_text()
@@ -35,6 +35,17 @@ class CatalogTestCase(unittest.TestCase):
         self.assertIn("/camera/api/camera/{image}", (COMPONENT / "const.py").read_text())
         self.assertIn("coordinator.data", camera)
         self.assertIn("update_interval=timedelta(minutes=refresh_minutes)", camera)
+
+    def test_catalog_failure_is_retryable_before_platform_setup(self) -> None:
+        setup = (COMPONENT / "__init__.py").read_text()
+        camera = (COMPONENT / "camera.py").read_text()
+        self.assertIn("ConfigEntryNotReady", setup)
+        self.assertIn("entry.runtime_data = await async_get_catalog(hass)", setup)
+        self.assertLess(
+            setup.index("entry.runtime_data = await async_get_catalog(hass)"),
+            setup.index("async_forward_entry_setups"),
+        )
+        self.assertIn("catalog: dict[str, str] = entry.runtime_data", camera)
 
 
 if __name__ == "__main__":
